@@ -35,7 +35,7 @@ app.post('/api/distribution', async (req, res) => {
   }
 });
 
-// General contact form endpoints
+// General contact form endpoint
 app.post('/api/contact', async (req, res) => {
   const {
     fullName,
