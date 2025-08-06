@@ -1,7 +1,7 @@
 // server.js
 require('dotenv').config();
 const express = require('express');
-const knexConfig = require('./knexfile').development;
+const knexConfig = require('./knexfile')[process.env.NODE_ENV || 'development'];
 const knex = require('knex')(knexConfig);
 const cors = require('cors');
 
