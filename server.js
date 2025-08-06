@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-// Health check
+// Health checks
 app.get('/', (req, res) => res.send('Form server is running.'));
 
 // Distribution form endpoint
