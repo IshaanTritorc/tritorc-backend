@@ -1,10 +1,9 @@
 // server.js
 require('dotenv').config();
 const express = require('express');
+const knexConfig = require('./knexfile').development;
+const knex = require('knex')(knexConfig);
 const cors = require('cors');
-
-// 🆕 Use centralized knex instance
-const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -19,7 +18,7 @@ app.get('/', (req, res) => res.send('Form server is running.'));
 app.post('/api/distribution', async (req, res) => {
   const { fullName, company, email, phone, regionOfInterest, message } = req.body;
   try {
-    const [id] = await db('distribution_submissions')
+    const [id] = await knex('distribution_submissions')
       .insert({
         full_name: fullName,
         company,
@@ -31,12 +30,12 @@ app.post('/api/distribution', async (req, res) => {
       .returning('id');
     res.status(201).json({ id });
   } catch (err) {
-    console.error('Error in /api/distribution:', err);
+    console.error(err);
     res.status(500).json({ error: 'Failed to save distribution inquiry.' });
   }
 });
 
-// Contact form endpoint
+// General contact form endpoint
 app.post('/api/contact', async (req, res) => {
   const {
     fullName,
@@ -49,7 +48,7 @@ app.post('/api/contact', async (req, res) => {
     subscribeNewsletter
   } = req.body;
   try {
-    const [id] = await db('contact_submissions')
+    const [id] = await knex('contact_submissions')
       .insert({
         full_name: fullName,
         email,
@@ -63,7 +62,7 @@ app.post('/api/contact', async (req, res) => {
       .returning('id');
     res.status(201).json({ id });
   } catch (err) {
-    console.error('Error in /api/contact:', err);
+    console.error(err);
     res.status(500).json({ error: 'Failed to save contact submission.' });
   }
 });
