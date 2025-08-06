@@ -9,6 +9,10 @@ const sharedConfig = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
   },
+  pool: {
+    min: 2,
+    max: 10
+  },
   migrations: {
     directory: './migrations'
   }
