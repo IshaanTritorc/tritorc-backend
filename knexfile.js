@@ -1,4 +1,3 @@
-// knexfile.js
 require('dotenv').config();
 
 module.exports = {
@@ -10,6 +9,25 @@ module.exports = {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      directory: './migrations'
+    }
+  },
+
+  production: {
+    client: 'pg',
+    connection: {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    },
+    pool: {
+      min: 2,
+      max: 10
     },
     migrations: {
       directory: './migrations'

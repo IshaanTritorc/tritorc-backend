@@ -1,9 +1,10 @@
 // server.js
 require('dotenv').config();
 const express = require('express');
-const knexConfig = require('./knexfile').development;
-const knex = require('knex')(knexConfig);
 const cors = require('cors');
+
+// 🆕 Use centralized knex instance
+const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -11,14 +12,14 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-// Health checks
+// Health check
 app.get('/', (req, res) => res.send('Form server is running.'));
 
 // Distribution form endpoint
 app.post('/api/distribution', async (req, res) => {
   const { fullName, company, email, phone, regionOfInterest, message } = req.body;
   try {
-    const [id] = await knex('distribution_submissions')
+    const [id] = await db('distribution_submissions')
       .insert({
         full_name: fullName,
         company,
@@ -30,12 +31,12 @@ app.post('/api/distribution', async (req, res) => {
       .returning('id');
     res.status(201).json({ id });
   } catch (err) {
-    console.error(err);
+    console.error('Error in /api/distribution:', err);
     res.status(500).json({ error: 'Failed to save distribution inquiry.' });
   }
 });
 
-// General contact form endpoint
+// Contact form endpoint
 app.post('/api/contact', async (req, res) => {
   const {
     fullName,
@@ -48,7 +49,7 @@ app.post('/api/contact', async (req, res) => {
     subscribeNewsletter
   } = req.body;
   try {
-    const [id] = await knex('contact_submissions')
+    const [id] = await db('contact_submissions')
       .insert({
         full_name: fullName,
         email,
@@ -62,7 +63,7 @@ app.post('/api/contact', async (req, res) => {
       .returning('id');
     res.status(201).json({ id });
   } catch (err) {
-    console.error(err);
+    console.error('Error in /api/contact:', err);
     res.status(500).json({ error: 'Failed to save contact submission.' });
   }
 });
