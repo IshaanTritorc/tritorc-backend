@@ -21,7 +21,7 @@ module.exports = {
       directory: './migrations'
     },
     pool: {
-      min: 2,
+      min: 0,
       max: 200
     },
     acquireConnectionTimeout: 10000
