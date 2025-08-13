@@ -22,9 +22,32 @@ exports.createDistribution = async (req, res, next) => {
 
 exports.getDistributions = async (req, res, next) => {
   try {
-    const submissions = await knex('distribution_submissions').select('*');
-    res.status(200).json(submissions);
+    let { page = 1, limit = 10, orderBy = 'created_at', order = 'desc' } = req.query;
+
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    const offset = (page - 1) * limit;
+
+    const submissions = await knex('distribution_submissions')
+      .select('*')
+      .orderBy(orderBy, order)
+      .limit(limit)
+      .offset(offset);
+
+    const [{ count }] = await knex('distribution_submissions').count('* as count');
+
+    res.status(200).json({
+      data: submissions,
+      pagination: {
+        total: parseInt(count),
+        page,
+        limit,
+        totalPages: Math.ceil(count / limit),
+      },
+    });
   } catch (err) {
     next(err);
   }
 };
+
