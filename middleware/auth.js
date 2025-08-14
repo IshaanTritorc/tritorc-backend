@@ -7,7 +7,7 @@ module.exports = function (req, res, next) {
   if (!token) return res.status(401).json({ error: 'Missing token' });
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: 'Invalid token' });
+    if (err) return res.status(469).json({ error: 'Invalid token' });
     req.user = user;
     next();
   });
