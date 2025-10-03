@@ -1,15 +1,18 @@
-// server.js
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const logger = require('./middleware/logger');
+const errorHandler = require('./middleware/errorHandler');
 const knexConfig = require('./knexfile').development;
 const knex = require('knex')(knexConfig);
-const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(logger);
 
 // Health check
 app.get('/', (req, res) => res.send('Form server is running.'));
