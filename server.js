@@ -22,6 +22,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/distribution', require('./routes/distribution'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/product', require('./routes/product'));
+app.use('/api/ppc', require('./routes/ppc'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/blog', require('./routes/blog'));
 
