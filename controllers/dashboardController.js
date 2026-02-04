@@ -9,11 +9,11 @@ exports.getLeadsSummary = async (req, res, next) => {
         // 2) last 4 weeks counts (week buckets)
         const statusSQL = `
       WITH all_leads AS (
-        SELECT status, created_at FROM contact_submissions WHERE is_active = true
+        SELECT status, created_at FROM contact_submissions WHERE is_active = true AND status IS NOT NULL
         UNION ALL
-        SELECT status, created_at FROM distribution_submissions WHERE is_active = true
+        SELECT status, created_at FROM distribution_submissions WHERE is_active = true AND status IS NOT NULL
         UNION ALL
-        SELECT status, created_at FROM product_contact_submissions WHERE is_active = true
+        SELECT status, created_at FROM product_contact_submissions WHERE is_active = true AND status IS NOT NULL
       )
       SELECT status, COUNT(*)::int AS count
       FROM all_leads
@@ -23,11 +23,11 @@ exports.getLeadsSummary = async (req, res, next) => {
         // last 4 full week buckets ending current week start (Mon-based) using date_trunc('week')
         const weeklySQL = `
       WITH all_leads AS (
-        SELECT created_at FROM contact_submissions WHERE is_active = true
+        SELECT created_at FROM contact_submissions WHERE is_active = true AND created_at IS NOT NULL
         UNION ALL
-        SELECT created_at FROM distribution_submissions WHERE is_active = true
+        SELECT created_at FROM distribution_submissions WHERE is_active = true AND created_at IS NOT NULL
         UNION ALL
-        SELECT created_at FROM product_contact_submissions WHERE is_active = true
+        SELECT created_at FROM product_contact_submissions WHERE is_active = true AND created_at IS NOT NULL
       ),
       weeks AS (
         SELECT generate_series(
@@ -96,13 +96,13 @@ exports.getRecentLeads = async (req, res, next) => {
     try {
         const listSQL = `
       SELECT id, status, created_at, 'contact' AS source, full_name AS full_name, email, company
-      FROM contact_submissions WHERE is_active = true
+      FROM contact_submissions WHERE is_active = true AND status IS NOT NULL AND created_at IS NOT NULL
       UNION ALL
       SELECT id, status, created_at, 'distribution' AS source, full_name AS full_name, email, company
-      FROM distribution_submissions WHERE is_active = true
+      FROM distribution_submissions WHERE is_active = true AND status IS NOT NULL AND created_at IS NOT NULL
       UNION ALL
       SELECT id, status, created_at, 'product' AS source, full_name AS full_name, email, company
-      FROM product_contact_submissions WHERE is_active = true
+      FROM product_contact_submissions WHERE is_active = true AND status IS NOT NULL AND created_at IS NOT NULL
       ORDER BY created_at DESC
       LIMIT 20;
     `;

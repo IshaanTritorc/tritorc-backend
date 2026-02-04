@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-exports.up = function(knex) {
-  return knex.schema.table('users', table => {
-    table.boolean('active').defaultTo(true);
-  });
-};
-
-exports.down = function(knex) {
-  return knex.schema.table('users', table => {
-    table.dropColumn('active');
-  });
-};
-=======
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
@@ -46,4 +33,3 @@ exports.down = async function (knex) {
         table.dropColumn('is_active');
     });
 };
->>>>>>> 0b7b2d6f1ab16710bde587af4be8d5dd8d5e6070

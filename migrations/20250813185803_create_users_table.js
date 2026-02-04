@@ -1,14 +1,14 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema.createTable('users', table => {
     table.increments('id').primary();
     table.string('email').notNullable().unique();
     table.string('password').notNullable();
     table.string('name').notNullable();
-    table.enu('role', ['admin', 'user']).defaultTo('user');
+    table.enu('role', ['superadmin', 'admin', 'editor', 'viewer', 'user']).defaultTo('user');
     table.timestamps(true, true);
   });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema.dropTableIfExists('users');
 };
