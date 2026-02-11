@@ -10,7 +10,10 @@ exports.createContact = async (req, res, next) => {
     subject,
     message,
     preferredContactMethod,
-    subscribeNewsletter
+    subscribeNewsletter,
+    location,
+    projectStatus,
+    quotationDeadline
   } = req.body;
   try {
     const [id] = await knex('contact_submissions')
@@ -22,7 +25,10 @@ exports.createContact = async (req, res, next) => {
         subject,
         message,
         preferred_contact_method: preferredContactMethod,
-        subscribe_newsletter: subscribeNewsletter
+        subscribe_newsletter: subscribeNewsletter,
+        location,
+        project_status: projectStatus,
+        quotation_deadline: quotationDeadline
       })
       .returning('id');
     res.status(201).json({ id });
